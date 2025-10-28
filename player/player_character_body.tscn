@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://dkbyhrm8sdsgm"]
+
+[ext_resource type="Script" uid="uid://blsc41fv81sfd" path="res://player/character_body_3d.gd" id="1_1o5gw"]
+[ext_resource type="Script" uid="uid://r6g38psoexaf" path="res://player/camera_orbiter.gd" id="2_uvqt2"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6adnx"]
+radius = 0.4
+height = 1.7
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_6adnx"]
+radius = 0.4
+height = 1.7
+
+[node name="PlayerCharacterBody" type="CharacterBody3D" node_paths=PackedStringArray("input_yaw_src")]
+script = ExtResource("1_1o5gw")
+move_speed = 3.0
+sprint_speed = 5.0
+air_input_force_strength = 2.0
+input_yaw_src = NodePath("CameraOrbiter")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_6adnx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_6adnx")
+skeleton = NodePath("../..")
+
+[node name="CameraOrbiter" type="Node3D" parent="."]
+physics_interpolation_mode = 2
+script = ExtResource("2_uvqt2")
+min_pitch = -0.7853981633974483
+max_pitch = 0.7853981633974483
+
+[node name="Camera3D" type="Camera3D" parent="CameraOrbiter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8.5)
