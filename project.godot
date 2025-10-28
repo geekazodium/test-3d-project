@@ -43,6 +43,10 @@ sprint={
 ]
 }
 
+[layer_names]
+
+3d_physics/layer_2="World"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

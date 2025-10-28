@@ -1,10 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://ctxcehauq87a6"]
+[gd_scene load_steps=9 format=3 uid="uid://ctxcehauq87a6"]
 
 [ext_resource type="PackedScene" uid="uid://dkbyhrm8sdsgm" path="res://player/player_character_body.tscn" id="1_0tkqh"]
-
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_uhqqe"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_uhqqe"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_uhqqe"]
 size = Vector3(15, 1, 4)
@@ -12,30 +8,60 @@ size = Vector3(15, 1, 4)
 [sub_resource type="BoxMesh" id="BoxMesh_uhqqe"]
 size = Vector3(15, 1, 4)
 
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_uhqqe"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_uhqqe"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_0tkqh"]
+vertices = PackedVector3Array(-1.2833967, -2.8886714, -1.5, -1.2833967, -2.8886714, 1.5, 9.466603, 5.8613286, 1.5, 9.466603, 5.8613286, -1.5)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 2
+geometry_source_geometry_mode = 1
+geometry_source_group_name = &"world_nav_mesh"
+
+[sub_resource type="Environment" id="Environment_ycvsm"]
+ssao_enabled = true
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_yl3ou"]
+
 [node name="Node3D" type="Node3D"]
 
 [node name="CharacterBody3D" parent="." instance=ExtResource("1_0tkqh")]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+[node name="World" type="Node3D" parent="." groups=["world_nav_mesh"]]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="StaticBody3D2" type="StaticBody3D" parent="World"]
+transform = Transform3D(0.77715695, -0.62930685, 0, 0.62930685, 0.77715695, 0, 0, 0, 1, 4.359934, 0.46970844, 0)
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/StaticBody3D2"]
+shape = SubResource("BoxShape3D_uhqqe")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/StaticBody3D2"]
+mesh = SubResource("BoxMesh_uhqqe")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/StaticBody3D"]
 shape = SubResource("WorldBoundaryShape3D_uhqqe")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="World/StaticBody3D"]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
 mesh = SubResource("PlaneMesh_uhqqe")
-skeleton = NodePath("../..")
+skeleton = NodePath("../../..")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.6708927, 0.74155444, 0, -0.74155444, 0.6708927, 0, 0, 0)
 shadow_enabled = true
 
-[node name="StaticBody3D2" type="StaticBody3D" parent="."]
-transform = Transform3D(0.77715695, -0.62930685, 0, 0.62930685, 0.77715695, 0, 0, 0, 1, 4.359934, 0.46970844, 0)
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." groups=["world_nav_mesh"]]
+navigation_mesh = SubResource("NavigationMesh_0tkqh")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
-shape = SubResource("BoxShape3D_uhqqe")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ycvsm")
+camera_attributes = SubResource("CameraAttributesPractical_yl3ou")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D2"]
-mesh = SubResource("BoxMesh_uhqqe")
+[node name="CharacterBody3D2" type="CharacterBody3D" parent="."]
