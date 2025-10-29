@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://ctxcehauq87a6"]
+[gd_scene load_steps=11 format=3 uid="uid://ctxcehauq87a6"]
 
 [ext_resource type="PackedScene" uid="uid://dkbyhrm8sdsgm" path="res://player/player_character_body.tscn" id="1_0tkqh"]
+[ext_resource type="PackedScene" uid="uid://cda150cebbpye" path="res://enemy/test_enemy.tscn" id="2_ycvsm"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_uhqqe"]
 size = Vector3(15, 1, 4)
@@ -12,13 +13,18 @@ size = Vector3(15, 1, 4)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_uhqqe"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ycvsm"]
+size = Vector3(50, 1, 50)
+
 [sub_resource type="NavigationMesh" id="NavigationMesh_0tkqh"]
-vertices = PackedVector3Array(-1.2833967, -2.8886714, -1.5, -1.2833967, -2.8886714, 1.5, 9.466603, 5.8613286, 1.5, 9.466603, 5.8613286, -1.5)
-polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+vertices = PackedVector3Array(9.5, 5.8613286, 1.5, 9.5, 5.8613286, -1.5, 0.5, -1.3886714, -1.5, 0.5, -1.3886714, 1.75, 8.214287, 4.6113286, 1.5357151, 8.214287, 4.6113286, -1.5, 3.5100117, 1.1113286, 0.4859867, 8.015049, 4.6113286, 0.5189495, 4.9950237, 2.1113286, 0.49697495, -24.5, -1.6386714, 24.5, 0.5, -1.6386714, 2.75, -0.586956, -1.6386714, 2.73913, 24.5, -1.6386714, 24.5, 24.5, -1.6386714, 2.75, 4.5, -1.6386714, 2.75, 4.5, -1.6386714, -2.5, 24.5, -1.6386714, -2.5, 24.5, -1.6386714, -24.5, 0.5, -1.6386714, -2.5, -24.5, -1.6386714, -24.5, -0.586956, -1.6386714, -2.5)
+polygons = [PackedInt32Array(2, 6, 3), PackedInt32Array(3, 8, 4), PackedInt32Array(4, 7, 0), PackedInt32Array(0, 7, 1), PackedInt32Array(1, 7, 5), PackedInt32Array(5, 8, 2), PackedInt32Array(6, 8, 3), PackedInt32Array(2, 8, 6), PackedInt32Array(8, 7, 4), PackedInt32Array(7, 8, 5), PackedInt32Array(3, 10, 11), PackedInt32Array(11, 10, 9), PackedInt32Array(14, 13, 12), PackedInt32Array(17, 16, 15), PackedInt32Array(14, 12, 10), PackedInt32Array(10, 12, 9), PackedInt32Array(15, 18, 17), PackedInt32Array(17, 18, 19), PackedInt32Array(2, 20, 18), PackedInt32Array(18, 20, 19), PackedInt32Array(3, 11, 2), PackedInt32Array(2, 11, 20), PackedInt32Array(20, 11, 9), PackedInt32Array(20, 9, 19), PackedInt32Array(15, 16, 14), PackedInt32Array(14, 16, 13)]
+sample_partition_type = 2
 geometry_parsed_geometry_type = 1
 geometry_collision_mask = 2
 geometry_source_geometry_mode = 1
 geometry_source_group_name = &"world_nav_mesh"
+detail_sample_max_error = 0.5
 
 [sub_resource type="Environment" id="Environment_ycvsm"]
 ssao_enabled = true
@@ -28,12 +34,30 @@ ssao_enabled = true
 [node name="Node3D" type="Node3D"]
 
 [node name="CharacterBody3D" parent="." instance=ExtResource("1_0tkqh")]
+move_speed = null
+sprint_speed = null
+input_force_strength = null
+air_input_force_strength = null
+forced_friction = null
+step_height = null
+
+[node name="CharacterBody3D2" parent="." instance=ExtResource("2_ycvsm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.301239)
+collision_mask = 2
+ideal_speed = null
+input_force_strength = null
+forced_friction = null
+step_height = null
+
+[node name="MovementDirection" parent="CharacterBody3D2" index="3" node_paths=PackedStringArray("target")]
+target = NodePath("../../CharacterBody3D")
 
 [node name="World" type="Node3D" parent="." groups=["world_nav_mesh"]]
 
 [node name="StaticBody3D2" type="StaticBody3D" parent="World"]
 transform = Transform3D(0.77715695, -0.62930685, 0, 0.62930685, 0.77715695, 0, 0, 0, 1, 4.359934, 0.46970844, 0)
 collision_layer = 2
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="World/StaticBody3D2"]
 shape = SubResource("BoxShape3D_uhqqe")
@@ -44,6 +68,7 @@ mesh = SubResource("BoxMesh_uhqqe")
 [node name="StaticBody3D" type="StaticBody3D" parent="World"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 collision_layer = 2
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="World/StaticBody3D"]
 shape = SubResource("WorldBoundaryShape3D_uhqqe")
@@ -52,6 +77,10 @@ shape = SubResource("WorldBoundaryShape3D_uhqqe")
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
 mesh = SubResource("PlaneMesh_uhqqe")
 skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="World/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_ycvsm")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.6708927, 0.74155444, 0, -0.74155444, 0.6708927, 0, 0, 0)
@@ -64,4 +93,4 @@ navigation_mesh = SubResource("NavigationMesh_0tkqh")
 environment = SubResource("Environment_ycvsm")
 camera_attributes = SubResource("CameraAttributesPractical_yl3ou")
 
-[node name="CharacterBody3D2" type="CharacterBody3D" parent="."]
+[editable path="CharacterBody3D2"]

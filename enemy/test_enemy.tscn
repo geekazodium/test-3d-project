@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://cda150cebbpye"]
+
+[ext_resource type="Script" uid="uid://j8am2d5qhph7" path="res://enemy/enemy_character_body.gd" id="1_jdt6p"]
+[ext_resource type="Script" uid="uid://dm05esq75t5ue" path="res://enemy/enemy_move_dir.gd" id="2_xhk1j"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jdt6p"]
+radius = 0.4
+height = 1.7
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jdt6p"]
+radius = 0.4
+height = 1.7
+
+[node name="CharacterBody3D2" type="CharacterBody3D" node_paths=PackedStringArray("movement_direction")]
+script = ExtResource("1_jdt6p")
+movement_direction = NodePath("MovementDirection")
+
+[node name="CapsuleCollisionShape" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_jdt6p")
+
+[node name="PlaceholderInstance" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_jdt6p")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.5
+
+[node name="MovementDirection" type="Node" parent="." node_paths=PackedStringArray("nav_agent", "current_position_node")]
+script = ExtResource("2_xhk1j")
+nav_agent = NodePath("../NavigationAgent3D")
+current_position_node = NodePath("..")

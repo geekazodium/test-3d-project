@@ -3,7 +3,7 @@ extends UMCharacterBody3D
 @export var move_speed: float = 5;
 @export var sprint_speed: float = 8;
 @export var input_force_strength: float = 10;
-@export var air_input_force_strength: float = 3;
+@export var air_input_force_strength: float = 1;
 
 const SPRINT_INPUT: StringName = "sprint";
 

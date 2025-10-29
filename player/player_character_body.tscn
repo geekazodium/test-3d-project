@@ -26,7 +26,6 @@ shape = SubResource("CapsuleShape3D_6adnx")
 
 [node name="PlaceholderInstance" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_6adnx")
-skeleton = NodePath("../..")
 
 [node name="CameraOrbiter" type="Node3D" parent="."]
 physics_interpolation_mode = 2
