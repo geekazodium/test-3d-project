@@ -27,7 +27,6 @@ geometry_source_group_name = &"world_nav_mesh"
 detail_sample_max_error = 0.5
 
 [sub_resource type="Environment" id="Environment_ycvsm"]
-ssao_enabled = true
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_yl3ou"]
 
@@ -39,7 +38,6 @@ sprint_speed = null
 input_force_strength = null
 air_input_force_strength = null
 forced_friction = null
-step_height = null
 
 [node name="CharacterBody3D2" parent="." instance=ExtResource("2_ycvsm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.301239)
@@ -47,7 +45,6 @@ collision_mask = 2
 ideal_speed = null
 input_force_strength = null
 forced_friction = null
-step_height = null
 
 [node name="MovementDirection" parent="CharacterBody3D2" index="3" node_paths=PackedStringArray("target")]
 target = NodePath("../../CharacterBody3D")
