@@ -45,6 +45,7 @@ sprint={
 
 [layer_names]
 
+3d_physics/layer_1="Character"
 3d_physics/layer_2="World"
 
 [physics]

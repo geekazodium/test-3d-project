@@ -27,24 +27,25 @@ shape = SubResource("CapsuleShape3D_6adnx")
 [node name="PlaceholderInstance" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_6adnx")
 
-[node name="CameraOrbiter" type="Node3D" parent="."]
+[node name="MovementDirection" type="Node" parent="." node_paths=PackedStringArray("input_yaw_src")]
+script = ExtResource("4_nijgw")
+input_yaw_src = NodePath("CameraOrbiter")
+
+[node name="CameraOrbiter" type="Node3D" parent="MovementDirection" node_paths=PackedStringArray("position_src")]
 physics_interpolation_mode = 2
 script = ExtResource("2_uvqt2")
-min_pitch = -0.7853981633974483
-max_pitch = 0.7853981633974483
+min_pitch = -1.3089969389957472
+max_pitch = 0.3490658503988659
+position_src = NodePath("../..")
 
-[node name="Camera3D" type="Camera3D" parent="CameraOrbiter" node_paths=PackedStringArray("shapecast")]
+[node name="Camera3D" type="Camera3D" parent="MovementDirection/CameraOrbiter" node_paths=PackedStringArray("shapecast")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8.5)
 script = ExtResource("3_gphhd")
 shapecast = NodePath("../ShapeCast3D")
 
-[node name="ShapeCast3D" type="ShapeCast3D" parent="CameraOrbiter"]
+[node name="ShapeCast3D" type="ShapeCast3D" parent="MovementDirection/CameraOrbiter"]
 enabled = false
 shape = SubResource("SphereShape3D_rsugj")
 target_position = Vector3(0, 0, 8.5)
 max_results = 1
 collision_mask = 2
-
-[node name="MovementDirection" type="Node" parent="." node_paths=PackedStringArray("input_yaw_src")]
-script = ExtResource("4_nijgw")
-input_yaw_src = NodePath("../CameraOrbiter")

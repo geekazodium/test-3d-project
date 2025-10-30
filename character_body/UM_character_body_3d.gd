@@ -7,10 +7,14 @@ class_name UMCharacterBody3D
 
 @export var movement_direction: MovementDirection;
 
+var last_nonzero_input_dir: Vector2;
+
 func _physics_process(delta: float) -> void:
 	var force: Vector3 = self.get_gravity();
 	
 	var input_direction: Vector2 = self.movement_direction.get_input_xz();
+	if input_direction != Vector2.ZERO:
+		self.last_nonzero_input_dir = input_direction;
 	
 	var ideal_speed: float = self._get_ideal_speed();
 	ideal_speed = max(ideal_speed, input_direction.dot(self._get_top_down_v()));
@@ -20,7 +24,11 @@ func _physics_process(delta: float) -> void:
 	force += -self.velocity * self.forced_friction;
 	force.x += input_force.x;
 	force.z += input_force.y;
+	self.rotation.y = -self.last_nonzero_input_dir.angle();
 	self.velocity += force * delta;
+	
+	
+	
 	self.move_and_slide();
 
 func _get_top_down_v() -> Vector2:

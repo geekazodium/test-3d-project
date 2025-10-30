@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cda150cebbpye"]
+[gd_scene load_steps=10 format=3 uid="uid://cda150cebbpye"]
 
 [ext_resource type="Script" uid="uid://j8am2d5qhph7" path="res://enemy/enemy_character_body.gd" id="1_jdt6p"]
 [ext_resource type="Script" uid="uid://dm05esq75t5ue" path="res://enemy/enemy_move_dir.gd" id="2_xhk1j"]
+[ext_resource type="Script" uid="uid://bgng63hrgcvq2" path="res://enemy/attack_1.gd" id="3_hdm1v"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jdt6p"]
 radius = 0.4
@@ -11,7 +12,18 @@ height = 1.7
 radius = 0.4
 height = 1.7
 
-[node name="CharacterBody3D2" type="CharacterBody3D" node_paths=PackedStringArray("movement_direction")]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hdm1v"]
+albedo_color = Color(0.081903495, 0.08190351, 0.08190351, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hdm1v"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xhk1j"]
+size = Vector3(2, 1, 2)
+
+[sub_resource type="QuadMesh" id="QuadMesh_xhk1j"]
+size = Vector2(1, 1.75)
+
+[node name="TestEnemy" type="CharacterBody3D" node_paths=PackedStringArray("movement_direction")]
 script = ExtResource("1_jdt6p")
 movement_direction = NodePath("MovementDirection")
 
@@ -21,10 +33,38 @@ shape = SubResource("CapsuleShape3D_jdt6p")
 [node name="PlaceholderInstance" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_jdt6p")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.52357346, 0, 0, 0, 0.30778188, 0, 0, 0, 0.5939014, 0.21482515, 0.46045566, 0)
+material_override = SubResource("StandardMaterial3D_hdm1v")
+mesh = SubResource("BoxMesh_hdm1v")
+
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 path_desired_distance = 0.5
+simplify_path = true
 
 [node name="MovementDirection" type="Node" parent="." node_paths=PackedStringArray("nav_agent", "current_position_node")]
 script = ExtResource("2_xhk1j")
 nav_agent = NodePath("../NavigationAgent3D")
 current_position_node = NodePath("..")
+distance_tolerance = 1.75
+
+[node name="Area3D" type="Area3D" parent="."]
+visible = false
+collision_layer = 0
+script = ExtResource("3_hdm1v")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+shape = SubResource("BoxShape3D_xhk1j")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Area3D"]
+transform = Transform3D(0.9999233, 0.012391608, 5.4165183e-10, -3.5734544e-16, -4.3711392e-08, 1, 0.012391608, -0.9999233, -4.370804e-08, 1.5936588, 2.3841858e-07, 0.0932765)
+mesh = SubResource("QuadMesh_xhk1j")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Area3D"]
+transform = Transform3D(0.6315963, 0.7752974, 3.388932e-08, 0, -4.371139e-08, 1, 0.7752974, -0.6315963, -2.7607953e-08, 1.0563035, 0, 1.1635206)
+mesh = SubResource("QuadMesh_xhk1j")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Area3D"]
+transform = Transform3D(-0.634879, 0.7726117, 3.3771926e-08, 0, -4.371139e-08, 1, 0.7726117, 0.634879, 2.775144e-08, 1.0605867, 0, -0.97118795)
+mesh = SubResource("QuadMesh_xhk1j")

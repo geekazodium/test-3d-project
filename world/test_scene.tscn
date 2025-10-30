@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://ctxcehauq87a6"]
+[gd_scene load_steps=12 format=3 uid="uid://ctxcehauq87a6"]
 
 [ext_resource type="PackedScene" uid="uid://dkbyhrm8sdsgm" path="res://player/player_character_body.tscn" id="1_0tkqh"]
 [ext_resource type="PackedScene" uid="uid://cda150cebbpye" path="res://enemy/test_enemy.tscn" id="2_ycvsm"]
+[ext_resource type="Script" uid="uid://idauc8ru35lv" path="res://world/world_boundary.gd" id="3_yl3ou"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_uhqqe"]
 size = Vector3(15, 1, 4)
@@ -9,12 +10,12 @@ size = Vector3(15, 1, 4)
 [sub_resource type="BoxMesh" id="BoxMesh_uhqqe"]
 size = Vector3(15, 1, 4)
 
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_uhqqe"]
-
 [sub_resource type="PlaneMesh" id="PlaneMesh_uhqqe"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ycvsm"]
 size = Vector3(50, 1, 50)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_uhqqe"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_0tkqh"]
 vertices = PackedVector3Array(9.5, 5.8613286, 1.5, 9.5, 5.8613286, -1.5, 0.5, -1.3886714, -1.5, 0.5, -1.3886714, 1.75, 8.214287, 4.6113286, 1.5357151, 8.214287, 4.6113286, -1.5, 3.5100117, 1.1113286, 0.4859867, 8.015049, 4.6113286, 0.5189495, 4.9950237, 2.1113286, 0.49697495, -24.5, -1.6386714, 24.5, 0.5, -1.6386714, 2.75, -0.586956, -1.6386714, 2.73913, 24.5, -1.6386714, 24.5, 24.5, -1.6386714, 2.75, 4.5, -1.6386714, 2.75, 4.5, -1.6386714, -2.5, 24.5, -1.6386714, -2.5, 24.5, -1.6386714, -24.5, 0.5, -1.6386714, -2.5, -24.5, -1.6386714, -24.5, -0.586956, -1.6386714, -2.5)
@@ -33,20 +34,12 @@ detail_sample_max_error = 0.5
 [node name="Node3D" type="Node3D"]
 
 [node name="CharacterBody3D" parent="." instance=ExtResource("1_0tkqh")]
-move_speed = null
-sprint_speed = null
-input_force_strength = null
-air_input_force_strength = null
-forced_friction = null
 
 [node name="CharacterBody3D2" parent="." instance=ExtResource("2_ycvsm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.301239)
 collision_mask = 2
-ideal_speed = null
-input_force_strength = null
-forced_friction = null
 
-[node name="MovementDirection" parent="CharacterBody3D2" index="3" node_paths=PackedStringArray("target")]
+[node name="MovementDirection" parent="CharacterBody3D2" index="4" node_paths=PackedStringArray("target")]
 target = NodePath("../../CharacterBody3D")
 
 [node name="World" type="Node3D" parent="." groups=["world_nav_mesh"]]
@@ -67,9 +60,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 collision_layer = 2
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/StaticBody3D"]
-shape = SubResource("WorldBoundaryShape3D_uhqqe")
-
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="World/StaticBody3D"]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
 mesh = SubResource("PlaneMesh_uhqqe")
@@ -78,6 +68,14 @@ skeleton = NodePath("../../..")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="World/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_ycvsm")
+
+[node name="Area3D" type="Area3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.9223104, 0)
+script = ExtResource("3_yl3ou")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+shape = SubResource("WorldBoundaryShape3D_uhqqe")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.6708927, 0.74155444, 0, -0.74155444, 0.6708927, 0, 0, 0)
@@ -89,5 +87,13 @@ navigation_mesh = SubResource("NavigationMesh_0tkqh")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ycvsm")
 camera_attributes = SubResource("CameraAttributesPractical_yl3ou")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(0.4928163, -0.6931209, 0.5260377, -0.6579987, 0.09872055, 0.74652016, -0.5693594, -0.7140294, -0.4074215, 14.443476, 2.3570342, -6.4400005)
+light_energy = 7.5
+shadow_enabled = true
+shadow_reverse_cull_face = true
+spot_range = 12.447756
+spot_angle = 38.361534
 
 [editable path="CharacterBody3D2"]
