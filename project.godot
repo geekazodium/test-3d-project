@@ -47,6 +47,7 @@ sprint={
 
 3d_physics/layer_1="Character"
 3d_physics/layer_2="World"
+3d_physics/layer_5="Player"
 
 [physics]
 

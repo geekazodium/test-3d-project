@@ -17,6 +17,7 @@ height = 1.7
 radius = 0.2
 
 [node name="PlayerCharacterBody" type="CharacterBody3D" node_paths=PackedStringArray("movement_direction")]
+collision_layer = 17
 collision_mask = 2
 script = ExtResource("1_gphhd")
 movement_direction = NodePath("MovementDirection")
@@ -27,9 +28,15 @@ shape = SubResource("CapsuleShape3D_6adnx")
 [node name="PlaceholderInstance" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_6adnx")
 
-[node name="MovementDirection" type="Node" parent="." node_paths=PackedStringArray("input_yaw_src")]
+[node name="ActionableTimer" type="Timer" parent="."]
+process_callback = 0
+one_shot = true
+
+[node name="MovementDirection" type="Node" parent="." node_paths=PackedStringArray("input_yaw_src", "actionable_timer")]
+process_physics_priority = -1
 script = ExtResource("4_nijgw")
 input_yaw_src = NodePath("CameraOrbiter")
+actionable_timer = NodePath("../ActionableTimer")
 
 [node name="CameraOrbiter" type="Node3D" parent="MovementDirection" node_paths=PackedStringArray("position_src")]
 physics_interpolation_mode = 2
