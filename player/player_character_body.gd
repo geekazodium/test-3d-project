@@ -17,14 +17,7 @@ var actionable_timer: Timer:
 	get:
 		return $ActionableTimer;
 
-var blocking_l: bool:
-	get:
-		return sign(block_direction) > 0;
-var blocking_r: bool:
-	get:
-		return sign(block_direction) < 0;
-
-var block_direction: float = 0;
+var block_direction: Vector2 = Vector2.ZERO;
 
 const SPRINT_INPUT: StringName = "sprint";
 
@@ -49,12 +42,23 @@ func _physics_process(delta: float) -> void:
 			self.actionable_timer.start(self.block_cd_timer.wait_time);
 			self.block_cd_timer.start();
 			self.block_active_timer.start();
-			self.block_direction = Input.get_axis("move_right","move_left");
+			self.block_direction = self.movement_direction.last_nonzero_user_input;
 
 func attempt_hit(attack: Attack, knockback: Vector3, stun: float) -> void:
+	var pos_diff = (attack.global_position - self.global_position) * Vector3(1,0,1);
+	pos_diff = pos_diff.normalized();
+	
+	var forward_bias: float = PI/3;
+	
+	var l_block_dir = pos_diff.rotated(Vector3.UP,PI/2 - forward_bias/2);
+	var r_block_dir = pos_diff.rotated(Vector3.UP,-PI/2 + forward_bias/2);
+	
+	var d: Vector3 = Vector3(block_direction.x,0,block_direction.y).normalized();
+	var blocking_l: bool = l_block_dir.dot(d) > cos(PI/2 - forward_bias/2);
+	var blocking_r: bool = r_block_dir.dot(d) > cos(PI/2 - forward_bias/2);
 	if !self.block_active_timer.is_stopped():
-		if (attack.l_blockable && self.blocking_l) ||\
-		(attack.r_blockable && self.blocking_r):
+		if (attack.l_blockable && blocking_l) ||\
+		(attack.r_blockable && blocking_r):
 			(attack.get_parent().get_parent() as UMCharacterBody3D).velocity = knockback * Vector3(-1,1,-1);
 			self.block_cd_timer.stop();
 			self.block_active_timer.stop();

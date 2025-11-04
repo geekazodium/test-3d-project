@@ -1,4 +1,5 @@
 extends MovementDirection
+class_name PlayerWishDir
 
 @export var input_yaw_src: Node3D;
 
@@ -9,10 +10,13 @@ const BACKWARD_INPUT: StringName = "move_backward";
 const RIGHT_INPUT: StringName = "move_left";
 const LEFT_INPUT: StringName = "move_right";
 
-var user_input_direction: Vector2 = Vector2.ZERO
+var user_input_direction: Vector2 = Vector2.ZERO;
+var last_nonzero_user_input: Vector2 = Vector2.UP;
 
 func _physics_process(delta: float) -> void:
 	self.update_user_input_dir();
+	if self.user_input_direction.length() > 0.001:
+		self.last_nonzero_user_input = user_input_direction;
 
 func get_input_xz() -> Vector2:
 	if !self.actionable_timer.is_stopped():
