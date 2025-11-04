@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://ctxcehauq87a6"]
+[gd_scene load_steps=13 format=3 uid="uid://ctxcehauq87a6"]
 
 [ext_resource type="PackedScene" uid="uid://dkbyhrm8sdsgm" path="res://player/player_character_body.tscn" id="1_0tkqh"]
 [ext_resource type="PackedScene" uid="uid://cda150cebbpye" path="res://enemy/test_enemy.tscn" id="2_ycvsm"]
@@ -27,9 +27,18 @@ geometry_source_geometry_mode = 1
 geometry_source_group_name = &"world_nav_mesh"
 detail_sample_max_error = 0.5
 
-[sub_resource type="Environment" id="Environment_ycvsm"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yl3ou"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
 
-[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_yl3ou"]
+[sub_resource type="Sky" id="Sky_bwqr6"]
+sky_material = SubResource("ProceduralSkyMaterial_yl3ou")
+
+[sub_resource type="Environment" id="Environment_2q0fw"]
+background_mode = 2
+sky = SubResource("Sky_bwqr6")
+tonemap_mode = 2
+glow_enabled = true
 
 [node name="Node3D" type="Node3D"]
 
@@ -83,13 +92,10 @@ shape = SubResource("WorldBoundaryShape3D_uhqqe")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.6708927, 0.74155444, 0, -0.74155444, 0.6708927, 0, 0, 0)
 shadow_enabled = true
+directional_shadow_mode = 0
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." groups=["world_nav_mesh"]]
 navigation_mesh = SubResource("NavigationMesh_0tkqh")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_ycvsm")
-camera_attributes = SubResource("CameraAttributesPractical_yl3ou")
 
 [node name="SpotLight3D" type="SpotLight3D" parent="."]
 transform = Transform3D(0.4928163, -0.6931209, 0.5260377, -0.6579987, 0.09872055, 0.74652016, -0.5693594, -0.7140294, -0.4074215, 14.443476, 2.3570342, -6.4400005)
@@ -98,6 +104,9 @@ shadow_enabled = true
 shadow_reverse_cull_face = true
 spot_range = 12.447756
 spot_angle = 38.361534
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_2q0fw")
 
 [editable path="Player"]
 [editable path="Enemy"]

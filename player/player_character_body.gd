@@ -21,6 +21,8 @@ var block_direction: Vector2 = Vector2.ZERO;
 
 const SPRINT_INPUT: StringName = "sprint";
 
+@export var parry_success_scene: PackedScene;
+
 func _ready() -> void:
 	self.block_active_timer.stop();
 	self.block_cd_timer.stop();
@@ -48,14 +50,14 @@ func attempt_hit(attack: Attack, knockback: Vector3, stun: float) -> void:
 	var pos_diff = (attack.global_position - self.global_position) * Vector3(1,0,1);
 	pos_diff = pos_diff.normalized();
 	
-	var forward_bias: float = PI/3;
+	var max_angle: float = PI/3;
 	
-	var l_block_dir = pos_diff.rotated(Vector3.UP,PI/2 - forward_bias/2);
-	var r_block_dir = pos_diff.rotated(Vector3.UP,-PI/2 + forward_bias/2);
+	var l_block_dir = pos_diff.rotated(Vector3.UP,PI/2);
+	var r_block_dir = pos_diff.rotated(Vector3.UP,-PI/2);
 	
 	var d: Vector3 = Vector3(block_direction.x,0,block_direction.y).normalized();
-	var blocking_l: bool = l_block_dir.dot(d) > cos(PI/2 - forward_bias/2);
-	var blocking_r: bool = r_block_dir.dot(d) > cos(PI/2 - forward_bias/2);
+	var blocking_l: bool = l_block_dir.dot(d) > cos(max_angle);
+	var blocking_r: bool = r_block_dir.dot(d) > cos(max_angle);
 	if !self.block_active_timer.is_stopped():
 		if (attack.l_blockable && blocking_l) ||\
 		(attack.r_blockable && blocking_r):
@@ -64,6 +66,7 @@ func attempt_hit(attack: Attack, knockback: Vector3, stun: float) -> void:
 			self.block_active_timer.stop();
 			self.actionable_timer.stop();
 			self.actionable_timer.start(.1);
+			self.add_child(self.parry_success_scene.instantiate());
 			return;
 	self.velocity += knockback;
 	self.actionable_timer.start(stun);
