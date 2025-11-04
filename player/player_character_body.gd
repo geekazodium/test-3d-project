@@ -21,6 +21,8 @@ var block_direction: Vector2 = Vector2.ZERO;
 
 const SPRINT_INPUT: StringName = "sprint";
 
+@export var camera_dir: CameraOrbiter;
+
 @export var parry_success_scene: PackedScene;
 
 func _ready() -> void:
@@ -44,7 +46,7 @@ func _physics_process(delta: float) -> void:
 			self.actionable_timer.start(self.block_cd_timer.wait_time);
 			self.block_cd_timer.start();
 			self.block_active_timer.start();
-			self.block_direction = self.movement_direction.last_nonzero_user_input;
+			self.block_direction = self.camera_dir.direction;
 			if sign(Input.get_axis("move_right","move_left")) < 0:
 				self.parry_r = true;
 				self.parry_l = false;

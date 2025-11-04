@@ -28,10 +28,11 @@ height = 1.7
 [sub_resource type="SphereShape3D" id="SphereShape3D_rsugj"]
 radius = 0.2
 
-[node name="PlayerCharacterBody" type="CharacterBody3D" node_paths=PackedStringArray("movement_direction")]
+[node name="PlayerCharacterBody" type="CharacterBody3D" node_paths=PackedStringArray("camera_dir", "movement_direction")]
 collision_layer = 17
 collision_mask = 2
 script = ExtResource("1_gphhd")
+camera_dir = NodePath("MovementDirection/CameraOrbiter")
 parry_success_scene = ExtResource("2_a730x")
 movement_direction = NodePath("MovementDirection")
 
