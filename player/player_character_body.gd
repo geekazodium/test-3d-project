@@ -45,22 +45,32 @@ func _physics_process(delta: float) -> void:
 			self.block_cd_timer.start();
 			self.block_active_timer.start();
 			self.block_direction = self.movement_direction.last_nonzero_user_input;
+			if sign(Input.get_axis("move_right","move_left")) < 0:
+				self.parry_r = true;
+				self.parry_l = false;
+			elif sign(Input.get_axis("move_right","move_left")) > 0:
+				self.parry_r = false;
+				self.parry_l = true;
+			else: 
+				self.parry_l = false;
+				self.parry_r = false;
+
+var parry_l: bool;
+var parry_r: bool;
 
 func attempt_hit(attack: Attack, knockback: Vector3, stun: float) -> void:
 	var pos_diff = (attack.global_position - self.global_position) * Vector3(1,0,1);
 	pos_diff = pos_diff.normalized();
 	
-	var max_angle: float = PI/3;
-	
-	var l_block_dir = pos_diff.rotated(Vector3.UP,PI/2);
-	var r_block_dir = pos_diff.rotated(Vector3.UP,-PI/2);
-	
 	var d: Vector3 = Vector3(block_direction.x,0,block_direction.y).normalized();
-	var blocking_l: bool = l_block_dir.dot(d) > cos(max_angle);
-	var blocking_r: bool = r_block_dir.dot(d) > cos(max_angle);
+	
+	var max_angle: float = PI * 4/5;
+	if d.dot(pos_diff) < cos(max_angle):
+		return;
+	
 	if !self.block_active_timer.is_stopped():
-		if (attack.l_blockable && blocking_l) ||\
-		(attack.r_blockable && blocking_r):
+		if (attack.l_blockable && self.parry_l) ||\
+		(attack.r_blockable && self.parry_r):
 			(attack.get_parent().get_parent() as UMCharacterBody3D).velocity = knockback * Vector3(-1,1,-1);
 			self.block_cd_timer.stop();
 			self.block_active_timer.stop();
