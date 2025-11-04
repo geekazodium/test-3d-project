@@ -37,8 +37,8 @@ permissions:
 
 env:
   GODOT_VERSION: 4.5
-  EXPORT_NAME: yuri-game
-  PROJECT_PATH: ./yuri/
+  EXPORT_NAME: test-3d
+  PROJECT_PATH: ./
 
   PAGES_BRANCH_PATH: ./pages_current/
   PAGES_BRANCH: gh-pages
