@@ -50,7 +50,7 @@ func attempt_hit(attack: Attack, knockback: Vector3, stun: float) -> void:
 	var pos_diff = (attack.global_position - self.global_position) * Vector3(1,0,1);
 	pos_diff = pos_diff.normalized();
 	
-	var max_angle: float = PI/3;
+	var max_angle: float = PI * 2/5;
 	
 	var l_block_dir = pos_diff.rotated(Vector3.UP,PI/2);
 	var r_block_dir = pos_diff.rotated(Vector3.UP,-PI/2);

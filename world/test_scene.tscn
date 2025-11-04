@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://ctxcehauq87a6"]
+[gd_scene load_steps=14 format=3 uid="uid://ctxcehauq87a6"]
 
 [ext_resource type="PackedScene" uid="uid://dkbyhrm8sdsgm" path="res://player/player_character_body.tscn" id="1_0tkqh"]
+[ext_resource type="Script" uid="uid://crhxx7novpkd" path="res://world/number.gd" id="2_bwqr6"]
 [ext_resource type="PackedScene" uid="uid://cda150cebbpye" path="res://enemy/test_enemy.tscn" id="2_ycvsm"]
 [ext_resource type="Script" uid="uid://idauc8ru35lv" path="res://world/world_boundary.gd" id="3_yl3ou"]
 
@@ -44,14 +45,43 @@ glow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("1_0tkqh")]
 
-[node name="CameraOrbiter" parent="Player/MovementDirection" index="0" node_paths=PackedStringArray("target")]
-target = NodePath("../../../Enemy")
+[node name="CameraOrbiter" parent="Player/MovementDirection" index="0" node_paths=PackedStringArray("rotate_speed_src")]
+rotate_speed_src = NodePath("CanvasLayer/HBoxContainer/CameraSpeed")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Player/MovementDirection/CameraOrbiter" index="2"]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Player/MovementDirection/CameraOrbiter/CanvasLayer"]
+offset_right = 485.0
+offset_bottom = 40.0
+
+[node name="CameraSpeedLabel" type="Label" parent="Player/MovementDirection/CameraOrbiter/CanvasLayer/HBoxContainer"]
+layout_mode = 2
+text = "Camera Speed"
+
+[node name="CameraSpeed" type="HSlider" parent="Player/MovementDirection/CameraOrbiter/CanvasLayer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 4
+min_value = 1.0
+step = 5.0
+value = 65.0
+
+[node name="Number" type="Label" parent="Player/MovementDirection/CameraOrbiter/CanvasLayer/HBoxContainer"]
+layout_mode = 2
+script = ExtResource("2_bwqr6")
 
 [node name="Enemy" parent="." instance=ExtResource("2_ycvsm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.301239)
 collision_mask = 2
 
 [node name="MovementDirection" parent="Enemy" index="4" node_paths=PackedStringArray("target")]
+target = NodePath("../../Player")
+
+[node name="Enemy2" parent="." instance=ExtResource("2_ycvsm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.7916746, 0, 6.301239)
+collision_mask = 2
+
+[node name="MovementDirection" parent="Enemy2" index="4" node_paths=PackedStringArray("target")]
 target = NodePath("../../Player")
 
 [node name="World" type="Node3D" parent="." groups=["world_nav_mesh"]]
@@ -110,3 +140,4 @@ environment = SubResource("Environment_2q0fw")
 
 [editable path="Player"]
 [editable path="Enemy"]
+[editable path="Enemy2"]

@@ -1,7 +1,11 @@
 extends Node3D
 class_name CameraOrbiter
 
-@export var rotate_speed: float = .01;
+@export var rotate_speed: float:
+	get:
+		return rotate_speed_src.value * .0002;
+
+@export var rotate_speed_src: Range
 
 @export_range(-180, 180, 0.001, "radians_as_degrees") var min_pitch: float = -PI/2;
 @export_range(-180, 180, 0.001, "radians_as_degrees") var max_pitch: float = PI/2;
