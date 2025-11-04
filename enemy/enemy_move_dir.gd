@@ -26,7 +26,8 @@ func _physics_process_in_range(_delta: float) -> void:
 		return;
 	if !self.actionable_timer.is_stopped():
 		return;
-	self.attack_l.use(.5,.3);
+	
+	(self.attack_l if randf()>.5 else self.attack_r).use(.5,.3);
 	self.actionable_timer.start(.8);
 
 func get_input_xz() -> Vector2:

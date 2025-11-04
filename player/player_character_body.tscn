@@ -1,9 +1,20 @@
-[gd_scene load_steps=8 format=3 uid="uid://dkbyhrm8sdsgm"]
+[gd_scene load_steps=10 format=3 uid="uid://dkbyhrm8sdsgm"]
 
 [ext_resource type="Script" uid="uid://bouafuxoorwbn" path="res://player/player_character_body.gd" id="1_gphhd"]
 [ext_resource type="Script" uid="uid://r6g38psoexaf" path="res://player/camera/camera_orbiter.gd" id="2_uvqt2"]
 [ext_resource type="Script" uid="uid://cwpwpp1ucih3c" path="res://player/camera/min_safe_margin_camera.gd" id="3_gphhd"]
 [ext_resource type="Script" uid="uid://0c5e6p8dg6t3" path="res://player/player_movement_direction.gd" id="4_nijgw"]
+[ext_resource type="Script" uid="uid://boj2kam5yrm10" path="res://player/parry_vis_indicator.gd" id="5_lduaf"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_nijgw"]
+lightmap_size_hint = Vector2i(33, 14)
+top_radius = 0.7
+bottom_radius = 1.2
+height = 0.1
+radial_segments = 10
+rings = 2
+cap_top = false
+cap_bottom = false
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6adnx"]
 radius = 0.4
@@ -21,6 +32,11 @@ collision_layer = 17
 collision_mask = 2
 script = ExtResource("1_gphhd")
 movement_direction = NodePath("MovementDirection")
+
+[node name="ParryVisIndicator" type="MeshInstance3D" parent="." node_paths=PackedStringArray("parry_active")]
+mesh = SubResource("CylinderMesh_nijgw")
+script = ExtResource("5_lduaf")
+parry_active = NodePath("../BlockActiveTimer")
 
 [node name="CapsuleCollisionShape" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_6adnx")
@@ -56,3 +72,13 @@ shape = SubResource("SphereShape3D_rsugj")
 target_position = Vector3(0, 0, 8.5)
 max_results = 1
 collision_mask = 2
+
+[node name="BlockCdTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.3
+one_shot = true
+
+[node name="BlockActiveTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.1
+one_shot = true

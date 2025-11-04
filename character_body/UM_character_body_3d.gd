@@ -27,8 +27,6 @@ func _physics_process(delta: float) -> void:
 	self.rotation.y = -self.last_nonzero_input_dir.angle();
 	self.velocity += force * delta;
 	
-	
-	
 	self.move_and_slide();
 
 func _get_top_down_v() -> Vector2:

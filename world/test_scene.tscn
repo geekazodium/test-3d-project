@@ -33,14 +33,17 @@ detail_sample_max_error = 0.5
 
 [node name="Node3D" type="Node3D"]
 
-[node name="CharacterBody3D" parent="." instance=ExtResource("1_0tkqh")]
+[node name="Player" parent="." instance=ExtResource("1_0tkqh")]
 
-[node name="CharacterBody3D2" parent="." instance=ExtResource("2_ycvsm")]
+[node name="CameraOrbiter" parent="Player/MovementDirection" index="0" node_paths=PackedStringArray("target")]
+target = NodePath("../../../Enemy")
+
+[node name="Enemy" parent="." instance=ExtResource("2_ycvsm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.301239)
 collision_mask = 2
 
-[node name="MovementDirection" parent="CharacterBody3D2" index="4" node_paths=PackedStringArray("target")]
-target = NodePath("../../CharacterBody3D")
+[node name="MovementDirection" parent="Enemy" index="4" node_paths=PackedStringArray("target")]
+target = NodePath("../../Player")
 
 [node name="World" type="Node3D" parent="." groups=["world_nav_mesh"]]
 
@@ -96,4 +99,5 @@ shadow_reverse_cull_face = true
 spot_range = 12.447756
 spot_angle = 38.361534
 
-[editable path="CharacterBody3D2"]
+[editable path="Player"]
+[editable path="Enemy"]

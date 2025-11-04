@@ -17,10 +17,13 @@ func _physics_process(_delta: float) -> void:
 		return;
 	if self.get_overlapping_bodies().size() > 0:
 		for b in self.get_overlapping_bodies():
-			b.velocity = Vector3.ZERO;
-			b.velocity += self.knockback * Quaternion.from_euler(-self.global_rotation);
-			(b.get_node("ActionableTimer") as Timer).start(self.stun_seconds);
-		self.monitoring = false;
+			if b is PlayerCharacter:
+				b.attempt_hit(
+					self,
+					self.knockback * Quaternion.from_euler(-self.global_rotation) - b.velocity,
+					self.stun_seconds
+				);
+				self.monitoring = false;
 
 func use(windup: float,active_seconds: float) -> void:
 	self.windup_indicator.visible = true;
