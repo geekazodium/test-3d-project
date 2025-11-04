@@ -51,3 +51,6 @@ func _process(delta: float) -> void:
 	yaw = fposmod(yaw, PI * 2);
 	self.quaternion = Quaternion.from_euler(Vector3(pitch, yaw,0));
 	
+var direction: Vector2:
+	get:
+		return Vector2.LEFT.rotated(-yaw + PI/2);
