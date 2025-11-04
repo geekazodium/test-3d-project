@@ -24,11 +24,12 @@ name: 'Godot CI'
 on: 
   push:
     branches: 
-      - main
-  pull_request:
-    branches:
-      - main
-    types: [opened, edited, review_requested]
+      - '**'
+      - '!gh-pages'
+  # pull_request:
+  #   branches:
+  #     - main
+  #   types: [opened, edited, review_requested]
 
 
 # NOTE: If your `project.godot` is at the repository root, set `PROJECT_PATH` below to ".".
