@@ -26,6 +26,8 @@ size = Vector2(1, 1.75)
 size = Vector3(2, 1, 2)
 
 [node name="TestEnemy" type="CharacterBody3D" node_paths=PackedStringArray("movement_direction")]
+collision_layer = 33
+collision_mask = 3
 script = ExtResource("1_jdt6p")
 movement_direction = NodePath("MovementDirection")
 
@@ -43,9 +45,12 @@ mesh = SubResource("BoxMesh_hdm1v")
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 path_desired_distance = 0.5
 simplify_path = true
+avoidance_enabled = true
+radius = 0.75
+use_3d_avoidance = true
 
 [node name="MovementDirection" type="Node" parent="." node_paths=PackedStringArray("nav_agent", "current_position_node", "actionable_timer", "attack_l", "attack_r")]
-process_physics_priority = -1
+process_physics_priority = -2
 script = ExtResource("2_xhk1j")
 nav_agent = NodePath("../NavigationAgent3D")
 current_position_node = NodePath("..")

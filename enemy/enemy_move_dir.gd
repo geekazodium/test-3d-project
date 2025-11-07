@@ -11,6 +11,21 @@ extends MovementDirection
 
 var direction_vec: Vector2 = Vector2.ZERO;
 
+var safe_vec: Vector2 = Vector2.ZERO;
+
+func _ready() -> void:
+	self.nav_agent.velocity_computed.connect(self.on_velocity_computed);
+
+func on_velocity_computed(safe_v: Vector3) -> void:
+	#self.nav_agent.target_position = target.global_position;
+	#var position: Vector3 = self.nav_agent.get_next_path_position();
+	#if self.nav_agent.get_path_length() <= distance_tolerance:
+		#self.direction_vec = Vector2.ZERO;
+		#self._physics_process_in_range(delta);
+		#return;
+	print(safe_v);
+	self.safe_vec = Vector2(safe_v.x,safe_v.z).normalized();
+
 func _physics_process(delta: float) -> void:
 	self.nav_agent.target_position = target.global_position;
 	var position: Vector3 = self.nav_agent.get_next_path_position();
@@ -19,7 +34,8 @@ func _physics_process(delta: float) -> void:
 		self._physics_process_in_range(delta);
 		return;
 	position -= self.current_position_node.global_position;
-	self.direction_vec = Vector2(position.x, position.z).normalized();
+	self.direction_vec = (Vector2(position.x, position.z).normalized() + safe_vec * .75).normalized();
+	self.safe_vec = Vector2.ZERO;
 
 func _physics_process_in_range(_delta: float) -> void:
 	if self.target.global_position.distance_to(self.current_position_node.global_position) > distance_tolerance:

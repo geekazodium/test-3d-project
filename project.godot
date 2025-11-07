@@ -54,6 +54,7 @@ block={
 3d_physics/layer_1="Character"
 3d_physics/layer_2="World"
 3d_physics/layer_5="Player"
+3d_physics/layer_6="Enemy"
 
 [physics]
 

@@ -5,6 +5,17 @@
 [ext_resource type="PackedScene" uid="uid://cda150cebbpye" path="res://enemy/test_enemy.tscn" id="2_ycvsm"]
 [ext_resource type="Script" uid="uid://idauc8ru35lv" path="res://world/world_boundary.gd" id="3_yl3ou"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2q0fw"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_ve1mj"]
+sky_material = SubResource("ProceduralSkyMaterial_2q0fw")
+
+[sub_resource type="Environment" id="Environment_itdxs"]
+background_mode = 2
+sky = SubResource("Sky_ve1mj")
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_uhqqe"]
 size = Vector3(15, 1, 4)
 
@@ -28,20 +39,10 @@ geometry_source_geometry_mode = 1
 geometry_source_group_name = &"world_nav_mesh"
 detail_sample_max_error = 0.5
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yl3ou"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-
-[sub_resource type="Sky" id="Sky_bwqr6"]
-sky_material = SubResource("ProceduralSkyMaterial_yl3ou")
-
-[sub_resource type="Environment" id="Environment_2q0fw"]
-background_mode = 2
-sky = SubResource("Sky_bwqr6")
-tonemap_mode = 2
-glow_enabled = true
-
 [node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_itdxs")
 
 [node name="Player" parent="." instance=ExtResource("1_0tkqh")]
 
@@ -64,22 +65,20 @@ layout_mode = 2
 size_flags_vertical = 4
 min_value = 1.0
 step = 5.0
-value = 65.0
+value = 66.0
 
 [node name="Number" type="Label" parent="Player/MovementDirection/CameraOrbiter/CanvasLayer/HBoxContainer"]
 layout_mode = 2
 script = ExtResource("2_bwqr6")
 
 [node name="Enemy" parent="." instance=ExtResource("2_ycvsm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.301239)
-collision_mask = 2
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9446125, 6.301239)
 
 [node name="MovementDirection" parent="Enemy" index="4" node_paths=PackedStringArray("target")]
 target = NodePath("../../Player")
 
 [node name="Enemy2" parent="." instance=ExtResource("2_ycvsm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.7916746, 0, 6.301239)
-collision_mask = 2
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.7916746, -0.9446125, 6.301239)
 
 [node name="MovementDirection" parent="Enemy2" index="4" node_paths=PackedStringArray("target")]
 target = NodePath("../../Player")
@@ -134,9 +133,6 @@ shadow_enabled = true
 shadow_reverse_cull_face = true
 spot_range = 12.447756
 spot_angle = 38.361534
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_2q0fw")
 
 [editable path="Player"]
 [editable path="Enemy"]
