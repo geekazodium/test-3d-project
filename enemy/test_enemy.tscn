@@ -26,6 +26,8 @@ size = Vector2(1, 1.75)
 size = Vector3(2, 1, 2)
 
 [node name="TestEnemy" type="CharacterBody3D" node_paths=PackedStringArray("movement_direction")]
+collision_layer = 33
+collision_mask = 3
 script = ExtResource("1_jdt6p")
 movement_direction = NodePath("MovementDirection")
 
@@ -43,9 +45,12 @@ mesh = SubResource("BoxMesh_hdm1v")
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 path_desired_distance = 0.5
 simplify_path = true
+avoidance_enabled = true
+radius = 0.75
+use_3d_avoidance = true
 
 [node name="MovementDirection" type="Node" parent="." node_paths=PackedStringArray("nav_agent", "current_position_node", "actionable_timer", "attack_l", "attack_r")]
-process_physics_priority = -1
+process_physics_priority = -2
 script = ExtResource("2_xhk1j")
 nav_agent = NodePath("../NavigationAgent3D")
 current_position_node = NodePath("..")
@@ -61,13 +66,14 @@ one_shot = true
 [node name="AttackL" type="Node3D" parent="."]
 
 [node name="AttackLWindup" type="MeshInstance3D" parent="AttackL"]
-transform = Transform3D(0.41063935, -0.91179776, -3.9855955e-08, 3.2385068e-15, -4.371139e-08, 1, -0.91179776, -0.41063935, -1.7949617e-08, 0.54388785, 2.3841858e-07, -1.403377)
+transform = Transform3D(0.36728528, -0.6577779, -3.9855955e-08, 2.896595e-15, -3.153373e-08, 1, -0.8155329, -0.29623836, -1.7949617e-08, -0.17476487, 2.3841858e-07, -0.82426846)
 visible = false
 material_override = ExtResource("4_ig4nv")
 mesh = SubResource("QuadMesh_xhk1j")
 skeleton = NodePath("../AttackLArea")
 
 [node name="AttackLArea" type="Area3D" parent="AttackL" node_paths=PackedStringArray("windup_indicator")]
+visible = false
 collision_layer = 0
 collision_mask = 16
 script = ExtResource("3_hdm1v")
@@ -98,13 +104,14 @@ mesh = SubResource("QuadMesh_xhk1j")
 [node name="AttackR" type="Node3D" parent="."]
 
 [node name="AttackRWindup" type="MeshInstance3D" parent="AttackR"]
-transform = Transform3D(0.409923, 0.91212004, 3.9870034e-08, 0, -4.3711385e-08, 1, 0.91212004, -0.409923, -1.7918303e-08, 0.544, 0, 1.403)
+transform = Transform3D(0.31589866, 0.602716, 3.9870034e-08, 0, -2.8883864e-08, 1, 0.7029064, -0.2708713, -1.7918303e-08, 0.059886336, 0, 0.8619318)
 visible = false
 material_override = ExtResource("5_1xekb")
 mesh = SubResource("QuadMesh_xhk1j")
 skeleton = NodePath("../AttackRArea")
 
 [node name="AttackRArea" type="Area3D" parent="AttackR" node_paths=PackedStringArray("windup_indicator")]
+visible = false
 collision_layer = 0
 collision_mask = 16
 script = ExtResource("3_hdm1v")

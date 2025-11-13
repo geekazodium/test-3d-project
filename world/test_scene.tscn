@@ -1,8 +1,21 @@
-[gd_scene load_steps=13 format=3 uid="uid://ctxcehauq87a6"]
+[gd_scene load_steps=15 format=3 uid="uid://ctxcehauq87a6"]
 
 [ext_resource type="PackedScene" uid="uid://dkbyhrm8sdsgm" path="res://player/player_character_body.tscn" id="1_0tkqh"]
+[ext_resource type="Script" uid="uid://crhxx7novpkd" path="res://world/number.gd" id="2_bwqr6"]
 [ext_resource type="PackedScene" uid="uid://cda150cebbpye" path="res://enemy/test_enemy.tscn" id="2_ycvsm"]
 [ext_resource type="Script" uid="uid://idauc8ru35lv" path="res://world/world_boundary.gd" id="3_yl3ou"]
+[ext_resource type="Script" uid="uid://ddaff864i7a8" path="res://world/enemy_turns.gd" id="5_2q0fw"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2q0fw"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_ve1mj"]
+sky_material = SubResource("ProceduralSkyMaterial_2q0fw")
+
+[sub_resource type="Environment" id="Environment_itdxs"]
+background_mode = 2
+sky = SubResource("Sky_ve1mj")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_uhqqe"]
 size = Vector3(15, 1, 4)
@@ -27,31 +40,57 @@ geometry_source_geometry_mode = 1
 geometry_source_group_name = &"world_nav_mesh"
 detail_sample_max_error = 0.5
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yl3ou"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-
-[sub_resource type="Sky" id="Sky_bwqr6"]
-sky_material = SubResource("ProceduralSkyMaterial_yl3ou")
-
-[sub_resource type="Environment" id="Environment_2q0fw"]
-background_mode = 2
-sky = SubResource("Sky_bwqr6")
-tonemap_mode = 2
-glow_enabled = true
-
 [node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_itdxs")
 
 [node name="Player" parent="." instance=ExtResource("1_0tkqh")]
 
-[node name="CameraOrbiter" parent="Player/MovementDirection" index="0" node_paths=PackedStringArray("target")]
-target = NodePath("../../../Enemy")
+[node name="CameraOrbiter" parent="Player/MovementDirection" index="0" node_paths=PackedStringArray("rotate_speed_src")]
+rotate_speed_src = NodePath("CanvasLayer/HBoxContainer/CameraSpeed")
 
-[node name="Enemy" parent="." instance=ExtResource("2_ycvsm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.301239)
-collision_mask = 2
+[node name="CanvasLayer" type="CanvasLayer" parent="Player/MovementDirection/CameraOrbiter" index="2"]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Player/MovementDirection/CameraOrbiter/CanvasLayer"]
+offset_right = 485.0
+offset_bottom = 40.0
+
+[node name="CameraSpeedLabel" type="Label" parent="Player/MovementDirection/CameraOrbiter/CanvasLayer/HBoxContainer"]
+layout_mode = 2
+text = "Camera Speed"
+
+[node name="CameraSpeed" type="HSlider" parent="Player/MovementDirection/CameraOrbiter/CanvasLayer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 4
+min_value = 1.0
+step = 5.0
+value = 66.0
+
+[node name="Number" type="Label" parent="Player/MovementDirection/CameraOrbiter/CanvasLayer/HBoxContainer"]
+layout_mode = 2
+script = ExtResource("2_bwqr6")
+
+[node name="Enemy" parent="." node_paths=PackedStringArray("_turn_handler") instance=ExtResource("2_ycvsm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9446125, 6.301239)
+_turn_handler = NodePath("../EnemyTurns")
 
 [node name="MovementDirection" parent="Enemy" index="4" node_paths=PackedStringArray("target")]
+target = NodePath("../../Player")
+
+[node name="Enemy2" parent="." node_paths=PackedStringArray("_turn_handler") instance=ExtResource("2_ycvsm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.7916746, -0.9446125, 6.301239)
+_turn_handler = NodePath("../EnemyTurns")
+
+[node name="MovementDirection" parent="Enemy2" index="4" node_paths=PackedStringArray("target")]
+target = NodePath("../../Player")
+
+[node name="Enemy3" parent="." node_paths=PackedStringArray("_turn_handler") instance=ExtResource("2_ycvsm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.0260067, -0.94461226, 2.8826914)
+_turn_handler = NodePath("../EnemyTurns")
+
+[node name="MovementDirection" parent="Enemy3" index="4" node_paths=PackedStringArray("target")]
 target = NodePath("../../Player")
 
 [node name="World" type="Node3D" parent="." groups=["world_nav_mesh"]]
@@ -105,8 +144,10 @@ shadow_reverse_cull_face = true
 spot_range = 12.447756
 spot_angle = 38.361534
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_2q0fw")
+[node name="EnemyTurns" type="Node" parent="."]
+script = ExtResource("5_2q0fw")
 
 [editable path="Player"]
 [editable path="Enemy"]
+[editable path="Enemy2"]
+[editable path="Enemy3"]

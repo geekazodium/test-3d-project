@@ -12,7 +12,7 @@ var last_nonzero_input_dir: Vector2;
 func _physics_process(delta: float) -> void:
 	var force: Vector3 = self.get_gravity();
 	
-	var input_direction: Vector2 = self.movement_direction.get_input_xz();
+	var input_direction: Vector2 = self.movement_direction.get_input_xz().normalized();
 	if input_direction != Vector2.ZERO:
 		self.last_nonzero_input_dir = input_direction;
 	
