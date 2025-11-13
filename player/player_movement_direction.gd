@@ -13,7 +13,14 @@ const LEFT_INPUT: StringName = "move_right";
 var user_input_direction: Vector2 = Vector2.ZERO;
 var last_nonzero_user_input: Vector2 = Vector2.UP;
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED;
+
 func _physics_process(delta: float) -> void:
+	if Input.is_action_just_pressed("ui_cancel"):
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE;
 	self.update_user_input_dir();
 	if self.user_input_direction.length() > 0.001:
 		self.last_nonzero_user_input = user_input_direction;

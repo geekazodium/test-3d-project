@@ -92,6 +92,7 @@ input_yaw_src = NodePath("CameraOrbiter")
 actionable_timer = NodePath("../ActionableTimer")
 
 [node name="CameraOrbiter" type="Node3D" parent="MovementDirection" node_paths=PackedStringArray("position_src")]
+process_mode = 3
 physics_interpolation_mode = 2
 script = ExtResource("2_uvqt2")
 min_pitch = -1.3089969389957472
